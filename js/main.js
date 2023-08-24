@@ -1,13 +1,14 @@
 var promiseEl = document.querySelector('#logo');
-var promiseEl2 = document.querySelector('#logo span');
-var promiseEl3 = document.querySelector('#logo img');
+var promiseEl2 = document.querySelector('#logo .path');
+var promiseEl3 = document.querySelector('#logo #logo-img');
 
 function logFinished() {
-    anime.set(promiseEl2, {
-        display: 'inline'
-    })
     anime.set(promiseEl3, {
         src: '/img/hashtag.svg'
+    })
+    anime.set(promiseEl2, {
+        fill: '#1C274C',
+        stroke:'none'
     })
 }
 
@@ -27,10 +28,14 @@ var animation = anime.timeline({
         height: '75px'
     })
     .add({
+        target: promiseEl,
         translateX: {
             value: '*=0.1', // 100px * 0.1 = '10px'
             duration: 1000
         },
+    })
+    .add({
+        targets: promiseEl3,
         width: {
             value: '-=20px', // 28 - 20 = '8px'
             duration: 1800,
@@ -42,16 +47,25 @@ var animation = anime.timeline({
             easing: 'easeInOutSine'
         },
         direction: 'alternate'
+    })
+    .add({
+        targets: promiseEl2,
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutSine',
+        duration: 1500,
+        delay: function(el, i) { return i * 100 },
+        direction: 'alternate',
     });
 
 animation.finished.then(logFinished);
 document.querySelector('#logo').onclick = function () {
-    anime.set(promiseEl2, {
-        display: 'none'
-    })
     anime.set(promiseEl3, {
         src: '/img/hashtag-white.svg'
     })
-    animation.play();
+    anime.set(promiseEl2, {
+        fill: '',
+        stroke: "#1C274C" 
+    })
+    animation.restart();
     animation.finished.then(logFinished);
 }
